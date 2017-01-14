@@ -25,7 +25,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 -->
 <launch>
 
-  <arg name="camera_enabled" default="true" />
   <arg name="laser_enabled" default="false"/>
   <arg name="ur5_enabled" default="false"/>
   <arg name="kinect_enabled" default="false"/>
@@ -43,7 +42,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <!-- Spawn FormulaPi Model -->
   <include file="$(find formulapi_gazebo)/launch/spawn/spawn_yetiborg.launch"> 
-   <arg name="camera_enabled" value="$(arg camera_enabled)"/>
    <arg name="laser_enabled" value="$(arg laser_enabled)"/>
    <arg name="ur5_enabled" value="$(arg ur5_enabled)"/>
    <arg name="kinect_enabled" value="$(arg kinect_enabled)"/>

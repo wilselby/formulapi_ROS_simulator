@@ -33,20 +33,38 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
 <!-- world_name is wrt GAZEBO_RESOURCE_PATH environment variable -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find formulapi_gazebo)/worlds/formulapi_basic.world"/>  
-    <arg name="paused" value="false"/>
+    <arg name="world_name" value="$(find formulapi_gazebo)/worlds/formulapi_track1.world"/>  
+    <arg name="paused" value="true"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
     <arg name="debug" value="false"/>
   </include>
 
-  <!-- Spawn FormulaPi Model -->
+  <!-- Spawn YetiBorg Model -->
   <include file="$(find formulapi_gazebo)/launch/spawn/spawn_yetiborg.launch"> 
    <arg name="camera_enabled" value="$(arg camera_enabled)"/>
    <arg name="laser_enabled" value="$(arg laser_enabled)"/>
    <arg name="ur5_enabled" value="$(arg ur5_enabled)"/>
    <arg name="kinect_enabled" value="$(arg kinect_enabled)"/>
   </include>
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- Load YetiBorg control information -->
+  <include file="$(find yetiborg_control)/launch/control.launch"/> 
+
+  <!-- Load Joystick node  -->
+  <include file="$(find yetiborg_control)/launch/teleop.launch"/> 
+
+  <!-- Run FormulaPi Software In The Loop Node -->
+  <node name="formulapi_sitl" pkg="formulapi_sitl" type="sitl_file.py" output="screen" /> 
+
+  <!-- spawn image viewer for camera -->
+    <node pkg="image_view" type="image_view" name="image_view" >
+      <remap from="image" to="/image_converter/output_video" />
+    </node>
+
 
 </launch>
